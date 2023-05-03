@@ -35,7 +35,16 @@ This data source will provide weather and climate data in Berlin, including aver
 
 <!-- List of work packages ordered sequentially, each pointing to an issue with more details. -->
 
-1. Example Issue [#1][i1]
-2. ...
+1. Data Collection, Preprocessing, and Storage [#1][i1]
+2. Data Analysis and Visualization [#2][i2]
+3. Automated Data Pipeline [#3][i3]
+4. Automated Tests for the Project [#4][i4]
+5. Continuous Integration Pipeline for the Project [#5][i5]
+6. Deploy the Project Using GitHub Pages [#6][i6]
 
-[i1]: https://github.com/jvalue/2023-amse-template/issues/1
+[i1]: https://github.com/sujitdebnath/fau-data-engineering-ss23/issues/1
+[i2]: https://github.com/sujitdebnath/fau-data-engineering-ss23/issues/2
+[i3]: https://github.com/sujitdebnath/fau-data-engineering-ss23/issues/3
+[i4]: https://github.com/sujitdebnath/fau-data-engineering-ss23/issues/4
+[i5]: https://github.com/sujitdebnath/fau-data-engineering-ss23/issues/5
+[i6]: https://github.com/sujitdebnath/fau-data-engineering-ss23/issues/6
