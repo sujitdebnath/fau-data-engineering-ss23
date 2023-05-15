@@ -10,7 +10,7 @@ Semester: SS2023
 
 # Python imports
 from typing import List, Dict
-import json, sys
+import json, sys, requests, os
 
 # Third party imports
 import pandas as pd
@@ -40,6 +40,7 @@ class PipelineService:
 
     Methods:
         load_json(file_path: str) -> Dict: Loads a JSON file as a dictionary.
+        download_data(url: str, output_path: str) -> None: Downloads data from the specified URL and saves it to the output path.
     """
 
     def __init__(self) -> None:
@@ -54,6 +55,9 @@ class PipelineService:
 
         Returns:
             data (dict): Loaded JSON data as a dictionary.
+        
+        Raises:
+            PipelineServiceError: If loading of JSON file fails or encounters an error.
         """
         try:
             with open(file_path, 'r') as file:
@@ -64,7 +68,31 @@ class PipelineService:
         except json.JSONDecodeError:
             raise PipelineServiceError(f"Error: Failed to decode JSON data in file '{file_path}'.")
         except Exception as e:
-            raise PipelineServiceError(f"Error: An unexpected error occurred: {str(e)}")
+            raise PipelineServiceError(f"Error: An unexpected error occurred. {str(e)}")
+
+    def download_data(self, url: str, output_path: str) -> None:
+        """
+        Downloads data from the specified URL and saves it to the output path.
+
+        Parameters:
+            url (str): The URL from which to download the data.
+            output_path (str): The path where the downloaded data will be saved.
+
+        Raises:
+            PipelineServiceError: If the download fails or encounters an error.
+        """
+        try:
+            response = requests.get(url)
+            response.raise_for_status()  # Raises an exception if the request was unsuccessful
+
+            with open(output_path, 'wb') as file:
+                file.write(response.content)
+
+            print(f"Succeed: Data downloaded successfully and saved to: {output_path}")
+        except requests.exceptions.RequestException as e:
+            raise PipelineServiceError(f"Error: Failed downloading data from URL. {str(e)}")
+        except Exception as e:
+            raise PipelineServiceError(f"Error: An unexpected error occurred. {str(e)}")
 
 
 class DataPipeline:
@@ -138,7 +166,7 @@ if __name__ == '__main__':
     # load the json file containing source information
     try:
         source_info = pipeline_service.load_json("source_info.json")
-        print(source_info)
+        # print(source_info)
     except PipelineServiceError as e:
         print(str(e))
         sys.exit(1)
