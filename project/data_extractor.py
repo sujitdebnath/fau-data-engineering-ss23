@@ -1,5 +1,5 @@
 # Python imports
-import requests
+import os, requests
 
 # Third party imports
 
@@ -33,7 +33,36 @@ class DataExtractor:
         Returns:
             None
         """
-        pass
+        for source in self.source_info["data_sources"]:
+
+            # download data from source 1: Mobilithek
+            if source["source_name"] == "Mobilithek":
+                data_urls = source["data_urls"]
+
+                for url_dict in data_urls:
+                    downloaded_file_name = "{}_bicycle_traffic_{}.csv".format(
+                        source["source_name"].lower(), url_dict["year"])
+                    downloaded_file_path = os.path.join("data", downloaded_file_name)
+                    
+                    self._download_data(url_dict["url"], downloaded_file_path)
+
+                    if os.path.exists(downloaded_file_path):
+                        self.extracted_data.append(downloaded_file_path)
+            
+            # download data from source 2: Meteostat
+            elif source["source_name"] == "Meteostat":
+                api_endpoint = source["api_endpoint"]
+
+                for station_dict in source["stations"]:
+                    downloaded_file_name = "{}_weather_data_{}_{}.csv.gz".format(
+                        source["source_name"].lower(), station_dict["station_id"], station_dict["station_name"])
+                    downloaded_file_path = os.path.join("data", downloaded_file_name)
+
+                    url = api_endpoint.replace("{station}", station_dict["station_id"])
+                    self._download_data(url, downloaded_file_path)
+
+                    if os.path.exists(downloaded_file_path):
+                        self.extracted_data.append(downloaded_file_path)
 
     def _download_data(self, url: str, output_path: str) -> None:
         """

@@ -58,9 +58,13 @@ class DataPipeline:
             None
 
         Returns:
-            extracted_data_list (list): A list of panda dataframe of extracted data
+            extracted_data (list): A list of strings which represent the raw data file path of extracted data
         """
-        return None
+
+        self.extractor.source_info = source_info
+        self.extractor.extract()
+
+        return self.extractor.extracted_data
 
     def on_transform(self, extracted_data: List) -> pd.DataFrame:
         """
@@ -98,22 +102,33 @@ class DataPipeline:
         Returns:
             None
         """
+        # load the source information from the json file
         source_info = helper_service.load_json("source_info.json")
         if not source_info:
+            print("Failed: loading the source information from the json file failed")
             sys.exit(1)
         
-        extracted_data = self.on_extract(source_info) # extract data from multiple sources
-        transformed_data = self.on_transform(extracted_data) # combine and transform data from both sources
-        loaded_data = self.on_load(transformed_data) # load transformed data into database
+        # extract data from multiple sources
+        print("\n{} {} {}".format(20*"-", "Extract: data extraction from the source initiated", 20*"-"))
+        extracted_data = self.on_extract(source_info)
+        print("{} {} {}\n".format(20*"-", "Extract: data extraction from the source ended", 20*"-"))
+
+        if not extracted_data:
+            print("Failed: data extraction from multiple sources failed")
+            sys.exit(1)
+        print(extracted_data)
+
+        # transformed_data = self.on_transform(extracted_data) # combine and transform data from both sources
+        # loaded_data = self.on_load(transformed_data) # load transformed data into database
 
 
 if __name__ == '__main__':
-    helper_service = HelperService() # create a object of HelperService
-    data_extractor = DataExtractor() # create a object of DataExtractor
-    data_transformer = DataTransformer() # create a object of DataTransformer
-    data_loader = DataLoader() # create a object of DataLoader
+    helper_service = HelperService() # created a object of HelperService
+    data_extractor = DataExtractor() # created a object of DataExtractor
+    data_transformer = DataTransformer() # created a object of DataTransformer
+    data_loader = DataLoader() # created a object of DataLoader
 
-    # create a object of DataPipeline using helper service, extractor, transformer and loader object
+    # created a object of DataPipeline using helper service, extractor, transformer and loader object
     etl_data_pipeline = DataPipeline(
         helper_service = helper_service,
         extractor = data_extractor,
@@ -121,5 +136,4 @@ if __name__ == '__main__':
         loader = data_loader
     )
 
-    # etl_data_pipeline.run_pipeline() # run the ETL pipeline
-    
+    etl_data_pipeline.run_pipeline() # run the ETL pipeline
