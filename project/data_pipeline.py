@@ -89,8 +89,10 @@ class PipelineService:
                 file.write(response.content)
 
             print(f"Succeed: Data downloaded successfully and saved to: {output_path}")
-        except requests.exceptions.RequestException as e:
-            raise PipelineServiceError(f"Error: Failed downloading data from URL. {str(e)}")
+        except requests.exceptions.ConnectionError as e:
+            raise PipelineServiceError(f"Error: Failed to download data from URL due to Connection error.")
+        except requests.exceptions.HTTPError as e:
+            raise PipelineServiceError(f"Error: Failed to download data from URL due to HTTP error. {str(e)}")
         except Exception as e:
             raise PipelineServiceError(f"Error: An unexpected error occurred. {str(e)}")
 
@@ -166,15 +168,27 @@ if __name__ == '__main__':
     # load the json file containing source information
     try:
         source_info = pipeline_service.load_json("source_info.json")
-        # print(source_info)
     except PipelineServiceError as e:
         print(str(e))
         sys.exit(1)
     
+    etl_data_pipeline = DataPipeline(pipeline_service)
+
     # extract data from multiple sources
+    etl_data_pipeline.extract(source_info)
 
     # combine data from both sources
 
     # transform data
 
     # load transformed data into database
+    url = source_info["data_sources"][0]["data_urls"][0]["url"]
+    # url = "https://geeksforgeeks.org/naveen/"
+    output_path = os.path.join(os.getcwd(), "data", "output_bicyle.csv")
+    print(url)
+    print(output_path)
+    try:
+        pipeline_service.download_data(url, output_path)
+    except PipelineServiceError as e:
+        print(str(e))
+        sys.exit(1)
