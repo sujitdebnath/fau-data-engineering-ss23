@@ -10,11 +10,25 @@ Semester: SS2023
 
 # Python imports
 from typing import List, Dict
+import json, sys
 
 # Third party imports
 import pandas as pd
 
 # Self imports
+
+
+class PipelineServiceError(Exception):
+    """
+    An exception class for raising errors when error occurs in PipelineService class
+
+    Attributes:
+        None
+
+    Methods:
+        None
+    """
+    pass
 
 
 class PipelineService:
@@ -25,11 +39,32 @@ class PipelineService:
         None
 
     Methods:
-        None
+        load_json(file_path: str) -> Dict: Loads a JSON file as a dictionary.
     """
 
     def __init__(self) -> None:
         pass
+
+    def load_json(self, file_path: str) -> Dict:
+        """
+        Loads a JSON file as a dictionary.
+
+        Parameters:
+            file_path (str): Path to the JSON file.
+
+        Returns:
+            data (dict): Loaded JSON data as a dictionary.
+        """
+        try:
+            with open(file_path, 'r') as file:
+                data = json.load(file)
+            return data
+        except FileNotFoundError:
+            raise PipelineServiceError(f"Error: File '{file_path}' not found.")
+        except json.JSONDecodeError:
+            raise PipelineServiceError(f"Error: Failed to decode JSON data in file '{file_path}'.")
+        except Exception as e:
+            raise PipelineServiceError(f"Error: An unexpected error occurred: {str(e)}")
 
 
 class DataPipeline:
@@ -62,10 +97,10 @@ class DataPipeline:
         Extracts data from multiple sources.
 
         Parameters:
-        source_info (Dict): A dictionary containing the necessary source URL and other information
+        source_info (dict): A dictionary containing the necessary source URL and other information
 
         Returns:
-            extracted_data_list (List): A list of panda dataframe of extracted data
+            extracted_data_list (list): A list of panda dataframe of extracted data
         """
 
         return None
@@ -98,8 +133,16 @@ class DataPipeline:
 
 
 if __name__ == '__main__':
-    source_info = dict()
+    pipeline_service = PipelineService()
 
+    # load the json file containing source information
+    try:
+        source_info = pipeline_service.load_json("source_info.json")
+        print(source_info)
+    except PipelineServiceError as e:
+        print(str(e))
+        sys.exit(1)
+    
     # extract data from multiple sources
 
     # combine data from both sources
