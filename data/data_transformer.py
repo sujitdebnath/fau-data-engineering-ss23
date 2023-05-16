@@ -1,5 +1,5 @@
 # Python imports
-import sys, calendar
+import os, sys, calendar
 
 # Third party imports
 import pandas as pd
@@ -19,11 +19,12 @@ class DataTransformer:
         transform() -> None: Transforms the extracted data by applying necessary transformations.
         _read_data(file_path: str, sep: str, compression: str, encoding: str) -> pd.DataFrame:
             Reads a file into a pandas DataFrame.
+        _delete_file(self, file_name: str) -> None: Delete a file from the directory.
     """
 
     def __init__(self) -> None:
         self.extracted_data = None
-        self.transformed_data = pd.DataFrame()
+        self.transformed_data = None
 
     def transform(self) -> None:
         """
@@ -39,6 +40,8 @@ class DataTransformer:
         for source, files_list in self.extracted_data.items():
             # read and transformed data of source 1: Mobilithek
             if source == "Mobilithek":
+                temp_df_list = []
+
                 for year, file_name in files_list:
                     if int(year) >= 2016 and int(year)<=2022:
                         if int(year) >= 2016 and int(year)<=2020:
@@ -65,7 +68,15 @@ class DataTransformer:
                             [month+"-"+year for month in calendar.month_name[1:]])
                     
                     print(f"Succeed: Transformation of {file_name} to dataframe is successfully done")
-                    print(data_df)
+                    temp_df_list.append(data_df)
+                    self._delete_file(file_name)
+                
+                print(len(temp_df_list))
+                source_1_merged_df = pd.concat([data_df for data_df in temp_df_list], axis=0, ignore_index=True)
+                source_1_merged_df.fillna(0, inplace=True)
+                source_1_merged_df = source_1_merged_df.astype({col:'int64' for col in source_1_merged_df.columns[1:]})
+                source_1_merged_df.to_csv('output.csv', index=False, encoding='utf-8-sig')
+                print(f"Succeed: Extracted data from {source} are successfully transformed and merged")
             
             # read and transformed data of source 2: Meteostat
             elif source == "Meteostat":
@@ -87,11 +98,31 @@ class DataTransformer:
         """
         try:
             data_df = pd.read_csv(file_path, sep=sep, compression=compression, encoding=encoding)
-            print(f"Succeed: {file_path} is successfully loaded")
+            print(f"Succeed: '{file_path}' is successfully loaded")
             return data_df
         except FileNotFoundError:
-            print(f"Error: File not found- {file_path}")
+            print(f"Error: File not found- '{file_path}'")
             sys.exit(1)
         except Exception as e:
             print(f"Error: Failed reading the file- {str(e)}")
+            sys.exit(1)
+        
+    def _delete_file(self, file_name: str) -> None:
+        """
+        Delete a file from the directory.
+
+        Parameters:
+            file_name (str): The desired file name.
+
+        Returns:
+            None
+        """
+        try:
+            os.remove(os.path.join(os.getcwd(), file_name))
+            print(f"Succeed: File '{file_name}' deleted successfully.")
+        except OSError as e:
+            print(f"Error: Issue occurred while deleting the file: {str(e)}")
+            sys.exit(1)
+        except Exception as e:
+            print(f"Error: Failed deleting the file- {str(e)}")
             sys.exit(1)
