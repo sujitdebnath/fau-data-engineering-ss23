@@ -1,5 +1,5 @@
 # Python imports
-import os, requests
+import os, sys, requests
 
 # Third party imports
 
@@ -42,12 +42,11 @@ class DataExtractor:
                 for url_dict in data_urls:
                     downloaded_file_name = "{}_bicycle_traffic_{}.csv".format(
                         source["source_name"].lower(), url_dict["year"])
-                    downloaded_file_path = os.path.join("data", downloaded_file_name)
                     
-                    self._download_data(url_dict["url"], downloaded_file_path)
+                    self._download_data(url_dict["url"], downloaded_file_name)
 
-                    if os.path.exists(downloaded_file_path):
-                        self.extracted_data.append(downloaded_file_path)
+                    if os.path.exists(downloaded_file_name):
+                        self.extracted_data.append(downloaded_file_name)
             
             # download data from source 2: Meteostat
             elif source["source_name"] == "Meteostat":
@@ -56,13 +55,12 @@ class DataExtractor:
                 for station_dict in source["stations"]:
                     downloaded_file_name = "{}_weather_data_{}_{}.csv.gz".format(
                         source["source_name"].lower(), station_dict["station_id"], station_dict["station_name"])
-                    downloaded_file_path = os.path.join("data", downloaded_file_name)
 
                     url = api_endpoint.replace("{station}", station_dict["station_id"])
-                    self._download_data(url, downloaded_file_path)
+                    self._download_data(url, downloaded_file_name)
 
-                    if os.path.exists(downloaded_file_path):
-                        self.extracted_data.append(downloaded_file_path)
+                    if os.path.exists(downloaded_file_name):
+                        self.extracted_data.append(downloaded_file_name)
 
     def _download_data(self, url: str, output_path: str) -> None:
         """
@@ -85,7 +83,10 @@ class DataExtractor:
             print(f"Succeed: Data downloaded successfully and saved to: {output_path}")
         except requests.exceptions.ConnectionError as e:
             print(f"Error: Failed to download data from URL due to Connection error.")
+            sys.exit(1)
         except requests.exceptions.HTTPError as e:
             print(f"Error: Failed to download data from URL due to HTTP error. {str(e)}")
+            sys.exit(1)
         except Exception as e:
             print(f"Error: An unexpected error occurred. {str(e)}")
+            sys.exit(1)

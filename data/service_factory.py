@@ -1,6 +1,6 @@
 # Python imports
 from typing import Dict, Union
-import json
+import json, sys
 
 # Third party imports
 
@@ -38,7 +38,10 @@ class HelperService:
             return data
         except FileNotFoundError:
             print(f"Error: File '{file_path}' not found.")
+            sys.exit(1)
         except json.JSONDecodeError:
             print(f"Error: Failed to decode JSON data in file '{file_path}'.")
+            sys.exit(1)
         except Exception as e:
             print(f"Error: An unexpected error occurred. {str(e)}")
+            sys.exit(1)

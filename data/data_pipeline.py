@@ -8,6 +8,7 @@ Course: Data Engineering (AMSE/SAKI)
 Semester: SS2023
 """
 
+
 # Python imports
 from typing import List, Dict, Union
 import sys, os
@@ -27,6 +28,7 @@ class DataPipeline:
     A class to represent an ETL pipeline.
 
     Attributes:
+        helper_service (HelperService): 
         extractor (DataExtractor): An object of DataExtractor class for extracting data
         transformer (DataTransformer): An object of DataTransformer class for transforming data
         loader (DataLoader): An object of DataLoader class for loading data
@@ -104,18 +106,12 @@ class DataPipeline:
         """
         # load the source information from the json file
         source_info = helper_service.load_json("source_info.json")
-        if not source_info:
-            print("Failed: loading the source information from the json file failed")
-            sys.exit(1)
         
         # extract data from multiple sources
         print("\n{} {} {}".format(20*"-", "Extract: data extraction from the source initiated", 20*"-"))
         extracted_data = self.on_extract(source_info)
         print("{} {} {}\n".format(20*"-", "Extract: data extraction from the source ended", 20*"-"))
 
-        if not extracted_data:
-            print("Failed: data extraction from multiple sources failed")
-            sys.exit(1)
         print(extracted_data)
 
         # transformed_data = self.on_transform(extracted_data) # combine and transform data from both sources
