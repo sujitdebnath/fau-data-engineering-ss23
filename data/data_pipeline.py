@@ -34,9 +34,9 @@ class DataPipeline:
         loader (DataLoader): An object of DataLoader class for loading data
 
     Methods:
-        extract(source_info: Dict) ->  List: Extracts data from multiple sources.
-        transform(extracted_data: pd.DataFrame) -> pd.DataFrame: Transforms the input data by applying necessary transformations.
-        load(transformed_data: pd.DataFrame) -> None: Loads transformed data into database.
+        on_extract(source_info: Dict) ->  Dict: Extracts data from multiple sources.
+        on_transform(extracted_data: Dict) -> pd.DataFrame: Transforms the input data by applying necessary transformations.
+        on_load(transformed_data: pd.DataFrame) -> None: Loads transformed data into database.
         run_pipeline() -> None: Run the whole ETL pipeline.
     """
 
@@ -52,15 +52,15 @@ class DataPipeline:
         self.transformer = transformer
         self.loader = loader
     
-    def on_extract(self, source_info: Dict) ->  List:
+    def on_extract(self, source_info: Dict) ->  Dict:
         """
         Extracts data from multiple sources.
 
         Parameters:
-            None
+            source_info (dict): A dictionary containing the necessary source URL and other information.
 
         Returns:
-            extracted_data (list): A list of strings which represent the raw data file path of extracted data
+            Dictionary: A dictionary containing information of extracted data.
         """
 
         self.extractor.source_info = source_info
@@ -68,7 +68,7 @@ class DataPipeline:
 
         return self.extractor.extracted_data
 
-    def on_transform(self, extracted_data: List) -> pd.DataFrame:
+    def on_transform(self, extracted_data: Dict) -> pd.DataFrame:
         """
         Transforms the input data by applying necessary transformations.
 
@@ -112,9 +112,7 @@ class DataPipeline:
         extracted_data = self.on_extract(source_info)
         print("{} {} {}\n".format(20*"-", "Extract: data extraction from the source ended", 20*"-"))
 
-        print(extracted_data)
-
-        # transformed_data = self.on_transform(extracted_data) # combine and transform data from both sources
+        transformed_data = self.on_transform(extracted_data) # combine and transform data from both sources
         # loaded_data = self.on_load(transformed_data) # load transformed data into database
 
 
