@@ -62,7 +62,6 @@ class DataPipeline:
         Returns:
             Dictionary: A dictionary containing information of extracted data.
         """
-
         self.extractor.source_info = source_info
         self.extractor.extract()
 
@@ -78,8 +77,10 @@ class DataPipeline:
         Returns:
             transformed_data (pd.DataFrame): A panda dataframe of transformed data.
         """
+        self.transformer.extracted_data = extracted_data
+        self.transformer.transform()
 
-        return None
+        return self.transformer.transformed_data
 
     def on_load(self, transformed_data: pd.DataFrame) -> None:
         """
@@ -111,8 +112,11 @@ class DataPipeline:
         print("\n{} {} {}".format(20*"-", "Extract: data extraction from the source initiated", 20*"-"))
         extracted_data = self.on_extract(source_info)
         print("{} {} {}\n".format(20*"-", "Extract: data extraction from the source ended", 20*"-"))
-
+        
+        print("\n{} {} {}".format(20*"-", "Transform: data transformation from extracted data initiated", 20*"-"))
         transformed_data = self.on_transform(extracted_data) # combine and transform data from both sources
+        print("{} {} {}\n".format(20*"-", "Transform: data transformation from extracted data ended", 20*"-"))
+
         # loaded_data = self.on_load(transformed_data) # load transformed data into database
 
 
