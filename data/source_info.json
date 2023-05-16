@@ -1,0 +1,98 @@
+{
+    "data_sources": [
+      {
+        "source_name": "Mobilithek",
+        "source_address": "https://mobilithek.info/",
+        "data_details": "Data source contains Köln's bicycle traffic generated from several automatic counting stations throughout the city from 2009.",
+        "data_urls": [
+            {
+                "year": "2009",
+                "url": "https://offenedaten-koeln.de/sites/default/files/Radverkehr%20f%C3%BCr%20Offene%20Daten%20K%C3%B6ln%202009.csv",
+                "data_type": "csv"
+            },
+            {
+                "year": "2010",
+                "url": "https://offenedaten-koeln.de/sites/default/files/Radverkehr%20f%C3%BCr%20Offene%20Daten%20K%C3%B6ln%202010.csv",
+                "data_type": "csv"
+            },
+            {
+                "year": "2011",
+                "url": "https://offenedaten-koeln.de/sites/default/files/Radverkehr%20f%C3%BCr%20Offene%20Daten%20K%C3%B6ln%202011.csv",
+                "data_type": "csv"
+            },
+            {
+                "year": "2012",
+                "url": "https://offenedaten-koeln.de/sites/default/files/Radverkehr%20f%C3%BCr%20Offene%20Daten%20K%C3%B6ln%202012.csv",
+                "data_type": "csv"
+            },
+            {
+                "year": "2013",
+                "url": "https://offenedaten-koeln.de/sites/default/files/Radverkehr%20f%C3%BCr%20Offene%20Daten%20K%C3%B6ln%202013.csv",
+                "data_type": "csv"
+            },
+            {
+                "year": "2014",
+                "url": "https://offenedaten-koeln.de/sites/default/files/Radverkehr%20f%C3%BCr%20Offene%20Daten%20K%C3%B6ln%202014.csv",
+                "data_type": "csv"
+            },
+            {
+                "year": "2015",
+                "url": "https://offenedaten-koeln.de/sites/default/files/Radverkehr%20f%C3%BCr%20Offene%20Daten%20K%C3%B6ln%202015.csv",
+                "data_type": "csv"
+            },
+            {
+                "year": "2016",
+                "url": "https://offenedaten-koeln.de/sites/default/files/Fahrrad_Zaehlstellen_Koeln_2016.csv",
+                "data_type": "csv"
+            },
+            {
+                "year": "2017",
+                "url": "https://offenedaten-koeln.de/sites/default/files/Fahrrad_Zaehlstellen_Koeln_2017.csv",
+                "data_type": "csv"
+            },
+            {
+                "year": "2018",
+                "url": "https://offenedaten-koeln.de/sites/default/files/Fahrrad_Zaehlstellen_Koeln_2018.csv",
+                "data_type": "csv"
+            },
+            {
+                "year": "2019",
+                "url": "https://offenedaten-koeln.de/sites/default/files/Fahrrad_Zaehlstellen_Koeln_2019.csv",
+                "data_type": "csv"
+            },
+            {
+                "year": "2020",
+                "url": "https://offenedaten-koeln.de/sites/default/files/Fahrrad_Zaehlstellen_Koeln_2020.csv",
+                "data_type": "csv"
+            },
+            {
+                "year": "2021",
+                "url": "https://offenedaten-koeln.de/sites/default/files/Radverkehr%20f%C3%BCr%20Offene%20Daten%20K%C3%B6ln%202021.csv",
+                "data_type": "csv"
+            },
+            {
+                "year": "2022",
+                "url": "https://offenedaten-koeln.de/sites/default/files/Radverkehr%20f%C3%BCr%20Offene%20Daten%20K%C3%B6ln%202022.csv",
+                "data_type": "csv"
+            }
+        ]
+      },
+      {
+        "source_name": "Meteostat",
+        "source_address": "https://meteostat.net/en/",
+        "data_details": "Data source will provide weather and climate data in Köln, including average air temperature, daily minimum and maximum air temperature, monthly precipitation total, maximum snow depth, average wind direction and speed, peak wind gust, average sea-level air pressure, and monthly sunshine total.",
+        "api_endpoint": "https://bulk.meteostat.net/v2/monthly/{station}.csv.gz",
+        "stations": [
+            {
+                "station_id": "10513",
+                "station_name": "Köln-Bonn Airport"
+            },
+            {
+                "station_id": "D2968",
+                "station_name": "Köln-Stammheim"
+            }
+        ],
+        "data_type": "gzip"
+      }
+    ]
+  }
