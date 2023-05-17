@@ -10,10 +10,10 @@ class DataLoader:
     A class to represent the data loader of an ETL pipeline.
 
     Attributes:
-        transformed_data (pd.DataFrame): A panda dataframe of transformed data.
+        transformed_data (dict): A dict that contains transformed data.
     
     Methods:
-        load(self) -> None: Loads transformed data into database.
+        load() -> None: Loads transformed data into database.
     """
 
     def __init__(self) -> None:
