@@ -26,7 +26,7 @@ class DataPipeline:
     A class to represent an ETL pipeline.
 
     Attributes:
-        helper_service (HelperService): 
+        helper_service (HelperService): An object of HelperService class for external functionalities
         extractor (DataExtractor): An object of DataExtractor class for extracting data
         transformer (DataTransformer): An object of DataTransformer class for transforming data
         loader (DataLoader): An object of DataLoader class for loading data
@@ -90,7 +90,8 @@ class DataPipeline:
         Returns:
             None
         """
-        pass
+        self.loader.transformed_data = transformed_data
+        self.loader.load()
 
     def run_pipeline(self) -> None:
         """
@@ -103,7 +104,7 @@ class DataPipeline:
             None
         """
         # load the source information from the json file
-        source_info = helper_service.load_json("source_info.json")
+        source_info = self.helper_service.load_json("source_info.json")
         
         # extract data from multiple sources
         print("\n{} {} {}".format(20*"-", "Extract: data extraction from the source initiated", 20*"-"))
@@ -116,21 +117,18 @@ class DataPipeline:
         print("{} {} {}\n".format(20*"-", "Transform: data transformation from extracted data ended", 20*"-"))
 
         # load transformed data into database
-        # loaded_data = self.on_load(transformed_data)
+        print("\n{} {} {}".format(20*"-", "Load: transformed data loading into a database initiated", 20*"-"))
+        self.on_load(transformed_data)
+        print("{} {} {}\n".format(20*"-", "Load: transformed data loading into a database ended", 20*"-"))
 
 
 if __name__ == '__main__':
-    helper_service = HelperService() # created a object of HelperService
-    data_extractor = DataExtractor() # created a object of DataExtractor
-    data_transformer = DataTransformer() # created a object of DataTransformer
-    data_loader = DataLoader() # created a object of DataLoader
-
     # created a object of DataPipeline using helper service, extractor, transformer and loader object
     etl_data_pipeline = DataPipeline(
-        helper_service = helper_service,
-        extractor = data_extractor,
-        transformer = data_transformer,
-        loader = data_loader
+        helper_service = HelperService(),
+        extractor = DataExtractor(),
+        transformer = DataTransformer(),
+        loader = DataLoader()
     )
 
     etl_data_pipeline.run_pipeline() # run the ETL pipeline
