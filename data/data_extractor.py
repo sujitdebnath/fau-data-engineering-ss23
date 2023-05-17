@@ -12,7 +12,7 @@ class DataExtractor:
 
     Attributes:
         source_info (dict): A dictionary containing the necessary source URL and other information.
-        extracted_data (list): A list of strings which represent the raw data file path of extracted data
+        extracted_data (dict): A dictionary containing information of extracted data
     
     Methods:
         extract() ->  None: Extracts data from multiple sources.
@@ -21,7 +21,7 @@ class DataExtractor:
 
     def __init__(self) -> None:
         self.source_info = None
-        self.extracted_data = list()
+        self.extracted_data = dict()
 
     def extract(self) -> None:
         """
@@ -35,6 +35,9 @@ class DataExtractor:
         """
         for source in self.source_info["data_sources"]:
 
+            if source["source_name"] not in self.extracted_data:
+                self.extracted_data[source["source_name"]] = list()
+
             # download data from source 1: Mobilithek
             if source["source_name"] == "Mobilithek":
                 data_urls = source["data_urls"]
@@ -46,7 +49,7 @@ class DataExtractor:
                     self._download_data(url_dict["url"], downloaded_file_name)
 
                     if os.path.exists(downloaded_file_name):
-                        self.extracted_data.append(downloaded_file_name)
+                        self.extracted_data[source["source_name"]].append((url_dict["year"], downloaded_file_name))
             
             # download data from source 2: Meteostat
             elif source["source_name"] == "Meteostat":
@@ -60,7 +63,8 @@ class DataExtractor:
                     self._download_data(url, downloaded_file_name)
 
                     if os.path.exists(downloaded_file_name):
-                        self.extracted_data.append(downloaded_file_name)
+                        self.extracted_data[source["source_name"]].append(
+                            (station_dict["station_id"], station_dict["station_name"], downloaded_file_name))
 
     def _download_data(self, url: str, output_path: str) -> None:
         """
