@@ -110,11 +110,13 @@ class DataPipeline:
         extracted_data = self.on_extract(source_info)
         print("{} {} {}\n".format(20*"-", "Extract: data extraction from the source ended", 20*"-"))
         
+        # read, transform and merge data from both sources
         print("\n{} {} {}".format(20*"-", "Transform: data transformation from extracted data initiated", 20*"-"))
-        transformed_data = self.on_transform(extracted_data) # combine and transform data from both sources
+        transformed_data = self.on_transform(extracted_data)
         print("{} {} {}\n".format(20*"-", "Transform: data transformation from extracted data ended", 20*"-"))
-        
-        # loaded_data = self.on_load(transformed_data) # load transformed data into database
+
+        # load transformed data into database
+        # loaded_data = self.on_load(transformed_data)
 
 
 if __name__ == '__main__':

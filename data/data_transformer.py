@@ -76,7 +76,7 @@ class DataTransformer:
                 merged_df = pd.concat([data_df for data_df in temp_df_list], axis=0, ignore_index=True)
                 merged_df.fillna(0, inplace=True)
                 merged_df = merged_df.astype({col:'int64' for col in merged_df.columns[1:]})
-                merged_df.to_csv(source+'.csv', index=False, encoding='utf-8-sig')
+                # merged_df.to_csv(source+'.csv', index=False, encoding='utf-8-sig')
                 print(f"Succeed: Extracted data from {source} are successfully transformed and merged")
             
             # read, transformed and merge data of source 2: Meteostat
@@ -106,7 +106,7 @@ class DataTransformer:
                 # merge data of source 2: Meteostat
                 merged_df = pd.merge(temp_df_list[0], temp_df_list[1], on='date', how='outer')
                 merged_df.fillna(0, inplace=True)
-                merged_df.to_csv(source+'.csv', index=False)
+                # merged_df.to_csv(source+'.csv', index=False)
                 print(f"Succeed: Extracted data from {source} are successfully transformed and merged")
             
             self.transformed_data[source] = merged_df
