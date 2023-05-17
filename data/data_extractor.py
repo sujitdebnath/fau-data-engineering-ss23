@@ -1,7 +1,8 @@
 # Python imports
-import os, sys, requests
+import os, sys
 
 # Third party imports
+import requests
 
 # Self imports
 
