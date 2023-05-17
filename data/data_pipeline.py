@@ -10,11 +10,9 @@ Semester: SS2023
 
 
 # Python imports
-from typing import List, Dict, Union
-import sys, os
+from typing import Dict
 
 # Third party imports
-import pandas as pd
 
 # Self imports
 from service_factory import HelperService
@@ -35,8 +33,8 @@ class DataPipeline:
 
     Methods:
         on_extract(source_info: Dict) ->  Dict: Extracts data from multiple sources.
-        on_transform(extracted_data: Dict) -> pd.DataFrame: Transforms the input data by applying necessary transformations.
-        on_load(transformed_data: pd.DataFrame) -> None: Loads transformed data into database.
+        on_transform(extracted_data: Dict) -> Dict: Transforms the input data by applying necessary transformations.
+        on_load(transformed_data: Dict) -> None: Loads transformed data into database.
         run_pipeline() -> None: Run the whole ETL pipeline.
     """
 
@@ -67,7 +65,7 @@ class DataPipeline:
 
         return self.extractor.extracted_data
 
-    def on_transform(self, extracted_data: Dict) -> pd.DataFrame:
+    def on_transform(self, extracted_data: Dict) -> Dict:
         """
         Transforms the input data by applying necessary transformations.
 
@@ -75,24 +73,23 @@ class DataPipeline:
             extracted_data (pd.DataFrame): A panda dataframe of all the extracted data.
 
         Returns:
-            transformed_data (pd.DataFrame): A panda dataframe of transformed data.
+            transformed_data (dict): A dict that contains transformed data.
         """
         self.transformer.extracted_data = extracted_data
         self.transformer.transform()
 
         return self.transformer.transformed_data
 
-    def on_load(self, transformed_data: pd.DataFrame) -> None:
+    def on_load(self, transformed_data: Dict) -> None:
         """
         Loads transformed data into database.
 
         Parameters:
-            transformed_data (pd.DataFrame): A panda dataframe of transformed data.
+            transformed_data (dict): A dict that contains transformed data.
         
         Returns:
             None
         """
-
         pass
 
     def run_pipeline(self) -> None:
@@ -116,7 +113,7 @@ class DataPipeline:
         print("\n{} {} {}".format(20*"-", "Transform: data transformation from extracted data initiated", 20*"-"))
         transformed_data = self.on_transform(extracted_data) # combine and transform data from both sources
         print("{} {} {}\n".format(20*"-", "Transform: data transformation from extracted data ended", 20*"-"))
-
+        
         # loaded_data = self.on_load(transformed_data) # load transformed data into database
 
 

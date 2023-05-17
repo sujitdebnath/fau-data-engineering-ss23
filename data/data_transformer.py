@@ -1,4 +1,5 @@
 # Python imports
+from typing import List
 import os, sys, calendar
 
 # Third party imports
@@ -13,18 +14,18 @@ class DataTransformer:
 
     Attributes:
         extracted_data (dict): A dictionary containing information of extracted data
-        transformed_data (pd.DataFrame): A panda dataframe of transformed data.
+        transformed_data (dict): A dict that contains transformed data.
     
     Methods:
         transform() -> None: Transforms the extracted data by applying necessary transformations.
         _read_data(file_path: str, sep: str, compression: str, encoding: str) -> pd.DataFrame:
             Reads a file into a pandas DataFrame.
-        _delete_file(self, file_name: str) -> None: Delete a file from the directory.
+        _delete_file(file_name: str) -> None: Delete a file from the directory.
     """
 
     def __init__(self) -> None:
         self.extracted_data = None
-        self.transformed_data = None
+        self.transformed_data = dict()
 
     def transform(self) -> None:
         """
@@ -36,12 +37,12 @@ class DataTransformer:
         Returns:
             None
         """
-
         for source, files_list in self.extracted_data.items():
-            # read and transformed data of source 1: Mobilithek
+            # read, transformed and merge data of source 1: Mobilithek
             if source == "Mobilithek":
                 temp_df_list = []
 
+                # read and transformed data of source 1: Mobilithek
                 for year, file_name in files_list:
                     if int(year) >= 2016 and int(year)<=2022:
                         if int(year) >= 2016 and int(year)<=2020:
@@ -71,25 +72,57 @@ class DataTransformer:
                     temp_df_list.append(data_df)
                     self._delete_file(file_name)
                 
-                print(len(temp_df_list))
-                source_1_merged_df = pd.concat([data_df for data_df in temp_df_list], axis=0, ignore_index=True)
-                source_1_merged_df.fillna(0, inplace=True)
-                source_1_merged_df = source_1_merged_df.astype({col:'int64' for col in source_1_merged_df.columns[1:]})
-                source_1_merged_df.to_csv('output.csv', index=False, encoding='utf-8-sig')
+                # merge data of source 1: Mobilithek
+                merged_df = pd.concat([data_df for data_df in temp_df_list], axis=0, ignore_index=True)
+                merged_df.fillna(0, inplace=True)
+                merged_df = merged_df.astype({col:'int64' for col in merged_df.columns[1:]})
+                merged_df.to_csv(source+'.csv', index=False, encoding='utf-8-sig')
                 print(f"Succeed: Extracted data from {source} are successfully transformed and merged")
             
-            # read and transformed data of source 2: Meteostat
+            # read, transformed and merge data of source 2: Meteostat
             elif source == "Meteostat":
-                print("Meteostat")
+                temp_df_list = []
+                parameters = ["year", "month", "tavg", "tmin", "tmax", "prcp", "wspd", "pres", "tsun"]
 
-    def _read_data(self, file_path: str, sep: str = None,
-                   compression: str = None, encoding: str = 'utf-8') -> pd.DataFrame:
+                # read and transformed data of source 2: Meteostat
+                for station_id, _, file_name in files_list:
+                    data_df = self._read_data(file_path=file_name, header=None, names=parameters, compression='gzip')
+                    
+                    data_df = data_df.loc[(data_df['year'] >= 2009) & (data_df['year'] <= 2022)]
+                    data_df['month'] = data_df['month'].replace(
+                            [num for num in range(1, 13)],
+                            [month for month in calendar.month_name[1:]])
+                    data_df['date'] = data_df['month'] + "-" + data_df['year'].astype(str)
+                    data_df.drop(['month', 'year'], inplace=True, axis=1)
+                    data_df = data_df[['date'] + [col for col in data_df.columns if col != 'date']]
+                    data_df.rename(columns={col:col+"_"+station_id for col in data_df.columns if col != 'date'}, inplace=True)
+                    data_df.fillna(0, inplace=True)
+                    data_df = data_df.reset_index(drop=True)
+
+                    print(f"Succeed: Transformation of {file_name} to dataframe is successfully done")
+                    temp_df_list.append(data_df)
+                    self._delete_file(file_name)
+                
+                # merge data of source 2: Meteostat
+                merged_df = pd.merge(temp_df_list[0], temp_df_list[1], on='date', how='outer')
+                merged_df.fillna(0, inplace=True)
+                merged_df.to_csv(source+'.csv', index=False)
+                print(f"Succeed: Extracted data from {source} are successfully transformed and merged")
+            
+            self.transformed_data[source] = merged_df
+
+    def _read_data(self, file_path: str, sep: str = ",",
+                   header: int = 0,
+                   names: List = None,
+                   compression: str = None,
+                   encoding: str = 'utf-8') -> pd.DataFrame:
         """
         Reads a file into a pandas DataFrame.
 
         Parameters:
             file_path (str): The path to the desired file.
             sep (str, optional): The seperator for the desired file.
+            header (int, optional): 
             compression (str, optional): The type of compression used on the file (e.g., 'gzip', 'zip').
             encoding (str, optional): The encoding of the desired file. Defaults to 'utf-8'.
 
@@ -97,7 +130,9 @@ class DataTransformer:
             data_df (pd.DataFrame): The contents of the file as a pandas DataFrame.
         """
         try:
-            data_df = pd.read_csv(file_path, sep=sep, compression=compression, encoding=encoding)
+            data_df = pd.read_csv(file_path, sep=sep,
+                                  header=header, names=names,
+                                  compression=compression, encoding=encoding)
             print(f"Succeed: '{file_path}' is successfully loaded")
             return data_df
         except FileNotFoundError:
