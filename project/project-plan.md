@@ -37,9 +37,9 @@ This data source will provide weather and climate data in Köln, including avera
 
 <!-- List of work packages ordered sequentially, each pointing to an issue with more details. -->
 
-1. Data Collection, Preprocessing, and Storage [#1][i1]
-2. Data Analysis and Visualization [#2][i2]
-3. Automated Data Pipeline [#3][i3]
+1. Extract Data from Multiple Sources [#1][i1]
+2. Implement Data Transformation Step in ETL Pipeline [#2][i2]
+3. Implement Data Loading Step in ETL Data Pipeline [#3][i3]
 4. Automated Tests for the Project [#4][i4]
 5. Continuous Integration Pipeline for the Project [#5][i5]
 6. Deploy the Project Using GitHub Pages [#6][i6]
