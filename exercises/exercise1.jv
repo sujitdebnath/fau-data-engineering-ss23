@@ -5,32 +5,14 @@ pipeline AirportsPipeline {
         url: "https://opendata.rhein-kreis-neuss.de/api/v2/catalog/datasets/rhein-kreis-neuss-flughafen-weltweit/exports/csv";
     }
 
-    // Pipe: AirportsExtractor (Out: File) -> AirportsTextFileInterpreter (In: File)
-    pipe {
-        from: AirportsExtractor;
-        to: AirportsTextFileInterpreter;
-    }
-
     // Transformer Block: Converts airports File to TextFile (In: File, Out: TextFile)
     block AirportsTextFileInterpreter oftype TextFileInterpreter {
         encoding: "utf-8";
     }
 
-    // Pipe: AirportsTextFileInterpreter (Out: TextFile) -> AirportsCSVInterpreter (In: TextFile)
-    pipe {
-        from: AirportsTextFileInterpreter;
-        to: AirportsCSVInterpreter;
-    }
-
     // Transformer Block: Converts airports TextFile to Sheet (In: TextFile, Out: Sheet)
     block AirportsCSVInterpreter oftype CSVInterpreter {
         delimiter: ";";
-    }
-
-    // Pipe: AirportsCSVInterpreter (Out: Sheet) -> AirportsTableInterpreter (In: Sheet)
-    pipe {
-        from: AirportsCSVInterpreter;
-        to: AirportsTableInterpreter;
     }
 
     // Transformer Block: Converts airports Sheet to Table (In: Sheet, Out: Table)
@@ -53,16 +35,17 @@ pipeline AirportsPipeline {
         ];
     }
 
-    // Pipe: AirportsTableInterpreter (Out: Table) -> AirportsLoader (In: Table)
-    pipe {
-        from: AirportsTableInterpreter;
-        to: AirportsLoader;
-    }
-
     // Loader Block: Load airports data into sqlite database (In: Table, Out: None)
     block AirportsLoader oftype SQLiteLoader {
         table: "airports";
         file: "./airports.sqlite";
     }
+
+    // Pipe: Build a chain of all the AirportsPipeline's blocks
+    AirportsExtractor
+        -> AirportsTextFileInterpreter
+        -> AirportsCSVInterpreter
+        -> AirportsTableInterpreter
+        -> AirportsLoader;
 
 }
