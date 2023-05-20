@@ -1,5 +1,6 @@
 # Database file
 data/fau_data_engineering_ss23.sqlite
+/exercises/*.sqlite
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
