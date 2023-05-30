@@ -5,6 +5,7 @@ import sys
 # Third party imports
 
 # Self imports
+from config.config_var import *
 
 
 class DataLoader:
@@ -33,7 +34,7 @@ class DataLoader:
         """
         try:
             # connect to the database
-            conn = sqlite3.connect('fau_data_engineering_ss23.sqlite')
+            conn = sqlite3.connect(DB_PATH)
             print(f"Succeed: Database created successfully")
 
             # insert data into the database

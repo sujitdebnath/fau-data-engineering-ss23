@@ -6,6 +6,7 @@ import os, sys, calendar
 import pandas as pd
 
 # Self imports
+from config.config_var import *
 
 
 class DataTransformer:
@@ -20,7 +21,7 @@ class DataTransformer:
         transform() -> None: Transforms the extracted data by applying necessary transformations.
         _read_data(file_path: str, sep: str, compression: str, encoding: str) -> pd.DataFrame:
             Reads a file into a pandas DataFrame.
-        _delete_file(file_name: str) -> None: Delete a file from the directory.
+        _delete_file(file_path: str) -> None: Delete a file from the directory.
     """
 
     def __init__(self) -> None:
@@ -44,11 +45,13 @@ class DataTransformer:
 
                 # read and transformed data of source 1: Mobilithek
                 for year, file_name in files_list:
+                    file_path = os.path.join(DOWNLOADED_RAW_FILE_PATH, file_name)
+
                     if int(year) >= 2016 and int(year)<=2022:
                         if int(year) >= 2016 and int(year)<=2020:
-                            data_df = self._read_data(file_path=file_name, sep=';', encoding='utf-8-sig')
+                            data_df = self._read_data(file_path=file_path, sep=';', encoding='utf-8-sig')
                         else:
-                            data_df = self._read_data(file_path=file_name, sep=';', encoding='unicode_escape')
+                            data_df = self._read_data(file_path=file_path, sep=';', encoding='unicode_escape')
                         
                         data_df.rename(columns={data_df.columns[0]: 'Date'}, inplace=True)
                         data_df.fillna(0, inplace=True)
@@ -58,7 +61,7 @@ class DataTransformer:
                         data_df[data_df.columns[1:]] = data_df[data_df.columns[1:]] * 1000
                         data_df = data_df.astype({col:'int64' for col in data_df.columns[1:]})
                     else:
-                        data_df = self._read_data(file_path=file_name, sep=';', encoding='unicode_escape')
+                        data_df = self._read_data(file_path=file_path, sep=';', encoding='unicode_escape')
 
                         data_df.rename(columns={data_df.columns[0]: 'Date'}, inplace=True)
                         data_df.drop(data_df[data_df['Date'] == 'Jahressumme'].index, inplace=True)
@@ -70,7 +73,7 @@ class DataTransformer:
                     
                     print(f"Succeed: Transformation of {file_name} to dataframe is successfully done")
                     temp_df_list.append(data_df)
-                    self._delete_file(file_name)
+                    self._delete_file(file_path)
                 
                 # merge data of source 1: Mobilithek
                 merged_df = pd.concat([data_df for data_df in temp_df_list], axis=0, ignore_index=True)
@@ -86,7 +89,8 @@ class DataTransformer:
 
                 # read and transformed data of source 2: Meteostat
                 for station_id, _, file_name in files_list:
-                    data_df = self._read_data(file_path=file_name, header=None, names=parameters, compression='gzip')
+                    file_path = os.path.join(DOWNLOADED_RAW_FILE_PATH, file_name)
+                    data_df = self._read_data(file_path=file_path, header=None, names=parameters, compression='gzip')
                     
                     data_df = data_df.loc[(data_df['year'] >= 2009) & (data_df['year'] <= 2022)]
                     data_df['month'] = data_df['month'].replace(
@@ -101,7 +105,7 @@ class DataTransformer:
 
                     print(f"Succeed: Transformation of {file_name} to dataframe is successfully done")
                     temp_df_list.append(data_df)
-                    self._delete_file(file_name)
+                    self._delete_file(file_path)
                 
                 # merge data of source 2: Meteostat
                 merged_df = pd.merge(temp_df_list[0], temp_df_list[1], on='date', how='outer')
@@ -133,7 +137,7 @@ class DataTransformer:
             data_df = pd.read_csv(file_path, sep=sep,
                                   header=header, names=names,
                                   compression=compression, encoding=encoding)
-            print(f"Succeed: '{file_path}' is successfully loaded")
+            print(f"Succeed: '{file_path.split(os.sep)[-1]}' is successfully loaded")
             return data_df
         except FileNotFoundError:
             print(f"Error: File not found- '{file_path}'")
@@ -141,20 +145,20 @@ class DataTransformer:
         except Exception as e:
             print(f"Error: Failed reading the file- {str(e)}")
             sys.exit(1)
-        
-    def _delete_file(self, file_name: str) -> None:
+    
+    def _delete_file(self, file_path: str) -> None:
         """
         Delete a file from the directory.
 
         Parameters:
-            file_name (str): The desired file name.
+            file_path (str): The desired file path.
 
         Returns:
             None
         """
         try:
-            os.remove(os.path.join(os.getcwd(), file_name))
-            print(f"Succeed: File '{file_name}' deleted successfully.")
+            os.remove(file_path)
+            print(f"Succeed: File '{file_path.split(os.sep)[-1]}' deleted successfully.")
         except OSError as e:
             print(f"Error: Issue occurred while deleting the file: {str(e)}")
             sys.exit(1)

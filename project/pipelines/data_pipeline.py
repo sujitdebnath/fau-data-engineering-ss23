@@ -15,10 +15,11 @@ from typing import Dict
 # Third party imports
 
 # Self imports
-from service_factory import HelperService
-from data_extractor import DataExtractor
-from data_transformer import DataTransformer
-from data_loader import DataLoader
+from config.config_var import *
+from utils.service_factory import HelperService
+from etl.extract.data_extractor import DataExtractor
+from etl.transform.data_transformer import DataTransformer
+from etl.load.data_loader import DataLoader
 
 
 class DataPipeline:
@@ -104,13 +105,13 @@ class DataPipeline:
             None
         """
         # load the source information from the json file
-        source_info = self.helper_service.load_json("source_info.json")
+        source_info = self.helper_service.load_json(SOURCE_INFO_PATH)
         
         # extract data from multiple sources
         print("\n{} {} {}".format(20*"-", "Extract: data extraction from the source initiated", 20*"-"))
         extracted_data = self.on_extract(source_info)
         print("{} {} {}\n".format(20*"-", "Extract: data extraction from the source ended", 20*"-"))
-        
+
         # read, transform and merge data from both sources
         print("\n{} {} {}".format(20*"-", "Transform: data transformation from extracted data initiated", 20*"-"))
         transformed_data = self.on_transform(extracted_data)
@@ -120,15 +121,3 @@ class DataPipeline:
         print("\n{} {} {}".format(20*"-", "Load: transformed data loading into a database initiated", 20*"-"))
         self.on_load(transformed_data)
         print("{} {} {}\n".format(20*"-", "Load: transformed data loading into a database ended", 20*"-"))
-
-
-if __name__ == '__main__':
-    # created a object of DataPipeline using helper service, extractor, transformer and loader object
-    etl_data_pipeline = DataPipeline(
-        helper_service = HelperService(),
-        extractor = DataExtractor(),
-        transformer = DataTransformer(),
-        loader = DataLoader()
-    )
-
-    etl_data_pipeline.run_pipeline() # run the ETL pipeline

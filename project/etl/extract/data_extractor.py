@@ -5,6 +5,7 @@ import os, sys
 import requests
 
 # Self imports
+from config.config_var import *
 
 
 class DataExtractor:
@@ -47,9 +48,11 @@ class DataExtractor:
                     downloaded_file_name = "{}_bicycle_traffic_{}.csv".format(
                         source["source_name"].lower(), url_dict["year"])
                     
-                    self._download_data(url_dict["url"], downloaded_file_name)
+                    downloaded_file_path = os.path.join(DOWNLOADED_RAW_FILE_PATH, downloaded_file_name)
+                    url = url_dict["url"]
+                    self._download_data(url, downloaded_file_path)
 
-                    if os.path.exists(downloaded_file_name):
+                    if os.path.exists(downloaded_file_path):
                         self.extracted_data[source["source_name"]].append((url_dict["year"], downloaded_file_name))
             
             # download data from source 2: Meteostat
@@ -59,11 +62,12 @@ class DataExtractor:
                 for station_dict in source["stations"]:
                     downloaded_file_name = "{}_weather_data_{}_{}.csv.gz".format(
                         source["source_name"].lower(), station_dict["station_id"], station_dict["station_name"])
-
+                    
+                    downloaded_file_path = os.path.join(DOWNLOADED_RAW_FILE_PATH, downloaded_file_name)
                     url = api_endpoint.replace("{station}", station_dict["station_id"])
-                    self._download_data(url, downloaded_file_name)
+                    self._download_data(url, downloaded_file_path)
 
-                    if os.path.exists(downloaded_file_name):
+                    if os.path.exists(downloaded_file_path):
                         self.extracted_data[source["source_name"]].append(
                             (station_dict["station_id"], station_dict["station_name"], downloaded_file_name))
 
@@ -85,7 +89,7 @@ class DataExtractor:
             with open(output_path, 'wb') as file:
                 file.write(response.content)
 
-            print(f"Succeed: Data downloaded successfully and saved to: {output_path}")
+            print(f"Succeed: Data downloaded successfully and saved as {output_path.split(os.sep)[-1]}")
         except requests.exceptions.ConnectionError as e:
             print(f"Error: Failed to download data from URL due to Connection error.")
             sys.exit(1)
