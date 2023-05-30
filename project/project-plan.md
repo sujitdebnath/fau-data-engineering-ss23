@@ -53,6 +53,7 @@ This data source will provide weather and climate data in Köln, including avera
 
 ## Project Structure
 
+```bash
 project/
 ├── config/                     # Configuration files and settings
 │   ├── __init__.py
@@ -83,3 +84,4 @@ project/
 │   └── service_factory.py      # Service factory utility
 ├── main.py                     # Entry point of the project
 └── project-plan.md             # Project plan and documentation
+```
