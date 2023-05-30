@@ -50,3 +50,36 @@ This data source will provide weather and climate data in Köln, including avera
 [i4]: https://github.com/sujitdebnath/fau-data-engineering-ss23/issues/4
 [i5]: https://github.com/sujitdebnath/fau-data-engineering-ss23/issues/5
 [i6]: https://github.com/sujitdebnath/fau-data-engineering-ss23/issues/6
+
+## Project Structure
+
+project/
+├── config/                     # Configuration files and settings
+│   ├── __init__.py
+│   ├── config_var.py           # Configuration variables
+│   └── source_info.json        # Source information
+├── data/                       # Data directory
+│   ├── processed/              # Processed data
+│   └── raw/                    # Raw data
+├── etl/                        # ETL (Extract, Transform, Load) pipeline modules
+│   ├── __init__.py
+│   ├── extract/                # Extraction module
+│   │   ├── __init__.py
+│   │   └── data_extractor.py   # Data extraction logic
+│   ├── load/                   # Loading module
+│   │   ├── __init__.py
+│   │   └── data_loader.py      # Data loading logic
+│   └── transform/              # Transformation module
+│       ├── __init__.py
+│       └── data_transformer.py # Data transformation logic
+├── pipelines/                  # Data pipeline modules
+│   ├── __init__.py
+│   └── data_pipeline.py        # ETL data pipeline implementation
+├── tests/                      # Test modules
+│   ├── __init__.py
+│   └── test_pipeline.py        # Test cases for the data pipeline
+├── utils/                      # Utility modules
+│   ├── __init__.py
+│   └── service_factory.py      # Service factory utility
+├── main.py                     # Entry point of the project
+└── project-plan.md             # Project plan and documentation
