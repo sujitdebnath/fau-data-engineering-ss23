@@ -1,10 +1,18 @@
 #!/bin/bash
 
 # Run component tests
+echo "----------------------------------- Component Testing Started -----------------------------------"
 pdm run python -m unittest tests/test_component.py
+echo "----------------------------------- Component Testing Ended -----------------------------------"
+
+echo ""
 
 # Run system tests
+echo "----------------------------------- System Level Testing Started -----------------------------------"
 pdm run python -m unittest tests/test_pipeline.py
+echo "----------------------------------- System Level Testing Ended -----------------------------------"
+
+echo ""
 
 # Check the exit code
 exit_code=$?
