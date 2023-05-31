@@ -78,10 +78,13 @@ project/
 │   └── data_pipeline.py        # ETL data pipeline implementation
 ├── tests/                      # Test modules
 │   ├── __init__.py
-│   └── test_pipeline.py        # Test cases for the data pipeline
+│   ├── test_component.py       # Test cases for component testing
+│   ├── test_pipeline.py        # Test cases for system testing
+│   └── transformed_data.pkl    # Original transformed data for testing purposes
 ├── utils/                      # Utility modules
 │   ├── __init__.py
 │   └── service_factory.py      # Service factory utility
 ├── main.py                     # Entry point of the project
+├── tests.sh                    # Bash script for running all the test cases
 └── project-plan.md             # Project plan and documentation
 ```
