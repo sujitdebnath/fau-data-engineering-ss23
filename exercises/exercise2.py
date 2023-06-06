@@ -1,10 +1,10 @@
 # Python imports
 import os, sys
 import sqlite3
+import urllib.request, urllib.error
 from typing import List, Dict
 
 # Third party imports
-import requests
 import pandas as pd
 
 
@@ -141,18 +141,10 @@ class DataPipeline:
             None
         """
         try:
-            response = requests.get(url)
-            response.raise_for_status()  # Raises an exception if the request was unsuccessful
-
-            with open(output_path, 'wb') as file:
-                file.write(response.content)
-
+            urllib.request.urlretrieve(url, output_path)
             print(f"Succeed: Data downloaded successfully and saved as {output_path.split(os.sep)[-1]}")
-        except requests.exceptions.ConnectionError as e:
-            print(f"Error: Failed to download data from URL due to Connection error.")
-            sys.exit(1)
-        except requests.exceptions.HTTPError as e:
-            print(f"Error: Failed to download data from URL due to HTTP error. {str(e)}")
+        except urllib.error.URLError as e:
+            print(f"Error: Failed to download data from URL. {str(e)}")
             sys.exit(1)
         except Exception as e:
             print(f"Error: An unexpected error occurred. {str(e)}")
