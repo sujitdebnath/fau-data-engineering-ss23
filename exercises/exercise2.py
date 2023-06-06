@@ -62,7 +62,6 @@ class DataPipeline:
         print(f"Info: Necessary transformations is started")
         transformed_data = transformed_data.drop('Status', axis=1)
         transformed_data = transformed_data[transformed_data['Verkehr'].isin(['FV', 'RV', 'nur DPN'])]
-        transformed_data['Betreiber_Nr'] = transformed_data['EVA_NR'].astype(int)
 
         for col in ['Laenge', 'Breite']:
             transformed_data[col] = transformed_data[col].str.replace(',', '.').astype(float)
@@ -73,6 +72,7 @@ class DataPipeline:
         transformed_data = transformed_data[transformed_data['IFOPT'].str.contains(pattern, regex=True, na=False)]
 
         transformed_data.dropna(inplace=True)
+        transformed_data['Betreiber_Nr'] = transformed_data['EVA_NR'].astype(int)
         print(f"Succeed: Necessary transformations is successfully ended")
         # perform necessary transformations - end
 
