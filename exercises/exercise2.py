@@ -66,6 +66,7 @@ class DataPipeline:
         for col in ['Laenge', 'Breite']:
             transformed_data[col] = transformed_data[col].str.replace(',', '.').astype(float)
             transformed_data = transformed_data[(transformed_data[col] >= -90) & (transformed_data[col] <= 90)]
+            transformed_data[col] = transformed_data[col].astype(str)
         
         # <exactly two characters>:<any amount of numbers>:<any amount of numbers><optionally another colon followed by any amount of numbers>
         pattern = r'^[A-Za-z]{2}:\d+:\d+(?::\d+)?$'
