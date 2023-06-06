@@ -62,6 +62,7 @@ class DataPipeline:
         print(f"Info: Necessary transformations is started")
         transformed_data = transformed_data.drop('Status', axis=1)
         transformed_data = transformed_data[transformed_data['Verkehr'].isin(['FV', 'RV', 'nur DPN'])]
+        transformed_data['Betreiber_Nr'] = transformed_data['EVA_NR'].astype(int)
 
         for col in ['Laenge', 'Breite']:
             transformed_data[col] = transformed_data[col].str.replace(',', '.').astype(float)
@@ -76,7 +77,7 @@ class DataPipeline:
         # perform necessary transformations - end
 
         self._delete_file(extracted_data)
-        
+
         return transformed_data
 
     def on_load(self, transformed_data: pd.DataFrame) -> None:
