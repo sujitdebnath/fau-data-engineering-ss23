@@ -5,6 +5,7 @@ import pickle
 import sqlite3
 
 # Third party imports
+import numpy as np
 import pandas as pd
 from pandas.testing import assert_frame_equal
 
@@ -112,6 +113,11 @@ class TestComponent(unittest.TestCase):
         expected_data_t1 = pd.read_sql_query("SELECT * FROM mobilithek_bicycle_traffic", conn)
         expected_data_t2 = pd.read_sql_query("SELECT * FROM meteostat_weather_data", conn)
         conn.close()
+
+        # Convert None to NaN in expected_data_t2
+        expected_data_t2 = expected_data_t2.where(pd.notnull(expected_data_t2), np.nan)
+        # Convert dtype of tsun_D2968 column from object to float
+        expected_data_t2["tsun_D2968"] = expected_data_t2["tsun_D2968"].astype(float)
 
         assert_frame_equal(transformed_data["Mobilithek"], expected_data_t1)
         assert_frame_equal(transformed_data["Meteostat"], expected_data_t2)
