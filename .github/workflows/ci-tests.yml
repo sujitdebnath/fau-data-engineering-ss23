@@ -4,9 +4,12 @@ on:
   push:
     paths-ignore:
       - 'exercise/**'
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  build:
+  build-and-run-tests:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,7 +23,6 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install --upgrade pip
           pip install --user pdm
           pdm install
 
