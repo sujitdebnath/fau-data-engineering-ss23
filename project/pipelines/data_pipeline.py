@@ -116,7 +116,7 @@ class DataPipeline:
         print("\n{} {} {}".format(20*"-", "Transform: data transformation from extracted data initiated", 20*"-"))
         transformed_data = self.on_transform(extracted_data)
         print("{} {} {}\n".format(20*"-", "Transform: data transformation from extracted data ended", 20*"-"))
-        
+
         # load transformed data into database
         print("\n{} {} {}".format(20*"-", "Load: transformed data loading into a database initiated", 20*"-"))
         self.on_load(transformed_data)
