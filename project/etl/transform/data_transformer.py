@@ -100,7 +100,7 @@ class DataTransformer:
                     data_df.drop(['month', 'year'], inplace=True, axis=1)
                     data_df = data_df[['date'] + [col for col in data_df.columns if col != 'date']]
                     data_df.rename(columns={col:col+"_"+station_id for col in data_df.columns if col != 'date'}, inplace=True)
-                    data_df.fillna(0, inplace=True)
+                    # data_df.fillna(0, inplace=True)
                     data_df = data_df.reset_index(drop=True)
 
                     print(f"Succeed: Transformation of {file_name} to dataframe is successfully done")
@@ -109,7 +109,7 @@ class DataTransformer:
                 
                 # merge data of source 2: Meteostat
                 merged_df = pd.merge(temp_df_list[0], temp_df_list[1], on='date', how='outer')
-                merged_df.fillna(0, inplace=True)
+                # merged_df.fillna(0, inplace=True)
                 # merged_df.to_csv(source+'.csv', index=False)
                 print(f"Succeed: Extracted data from {source} are successfully transformed and merged")
             

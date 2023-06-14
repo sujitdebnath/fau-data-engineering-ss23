@@ -1,0 +1,33 @@
+name: CI pipeline for running tests
+
+on:
+  push:
+    paths-ignore:
+      - 'exercise/**'
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-run-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.8.x
+
+      - name: Install dependencies
+        run: |
+          pip install --user pdm
+          pdm install
+
+      - name: Run tests
+        run: |
+          cd project
+          chmod +x tests.sh
+          sh tests.sh
