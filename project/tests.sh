@@ -8,11 +8,23 @@ echo "----------------------------------- Component Testing Ended --------------
 
 echo ""
 
+# Remove the generated SQLite file after component testing
+echo "Remove the generated SQLite file after component testing (if exists)"
+rm -f fau_data_engineering_ss23.sqlite
+
+echo ""
+
 # Run system tests
 echo "----------------------------------- System Level Testing Started -----------------------------------"
 pdm run python -m unittest tests/test_pipeline.py
 system_exit_code=$?
 echo "----------------------------------- System Level Testing Ended -----------------------------------"
+
+echo ""
+
+# Remove the generated SQLite file after system level testing
+echo "Remove the generated SQLite file after system level testing (if exists)"
+rm -f fau_data_engineering_ss23.sqlite
 
 echo ""
 
