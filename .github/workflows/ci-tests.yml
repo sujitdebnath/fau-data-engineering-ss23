@@ -20,7 +20,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install pdm
+          pip install --user pdm
           pdm install
 
       - name: Run tests
