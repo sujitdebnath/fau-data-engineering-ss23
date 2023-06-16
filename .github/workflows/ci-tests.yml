@@ -1,4 +1,4 @@
-name: CI pipeline for running tests
+name: Continuous Integration Pipeline
 
 on:
   push:
@@ -9,11 +9,11 @@ on:
       - main
 
 jobs:
-  build-and-run-tests:
+  build-and-tests-pipeline:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository code
         uses: actions/checkout@v3
 
       - name: Set up Python
@@ -31,3 +31,29 @@ jobs:
           cd project
           chmod +x tests.sh
           sh tests.sh
+
+      - name: Send Slack notification on test failure
+        if: ${{ failure() }}
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        run: |
+          curl -X POST \
+          -H 'Content-type: application/json' \
+          --data '{
+              "blocks": [
+                  {
+                      "type": "header",
+                      "text": {
+                          "type": "plain_text",
+                          "text": "Test result of repo ${{ github.repository }}"
+                      }
+                  },
+                  {
+                      "type": "section",
+                      "text": {
+                          "type": "mrkdwn",
+                          "text": "Test failed!\nPlease check at ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                      }
+                  }
+              ]
+          }' $SLACK_WEBHOOK_URL
