@@ -33,8 +33,8 @@ class TestSystem(unittest.TestCase):
         conn = sqlite3.connect(DB_PATH)
 
         expected_row_counts = {
-            'mobilithek_bicycle_traffic': 168,
-            'meteostat_weather_data': 160
+            'mobilithek_bicycle_traffic': 160,
+            'meteostat_weather_data': 168
         }
 
         for table_name, expected_row_count in expected_row_counts.items():
