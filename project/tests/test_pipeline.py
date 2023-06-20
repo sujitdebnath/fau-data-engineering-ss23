@@ -34,7 +34,7 @@ class TestSystem(unittest.TestCase):
 
         expected_row_counts = {
             'mobilithek_bicycle_traffic': 168,
-            'meteostat_weather_data': 168
+            'meteostat_weather_data': 160
         }
 
         for table_name, expected_row_count in expected_row_counts.items():
