@@ -1,0 +1,74 @@
+pipeline CarsPipeline {
+
+    // Extracts cars CSV file from the desired url (In: None, Out: File)
+    block CarsExtractor oftype HttpExtractor {
+        url: "https://www-genesis.destatis.de/genesis/downloads/00/tables/46251-0021_00.csv";
+    }
+
+    // Converts cars File to TextFile (In: File, Out: TextFile)
+    block CarsTextFileInterpreter oftype TextFileInterpreter { encoding: "ascii"; }
+
+    // Select the appropriate range from cars TextFile, ignore metadata (In: TextFile, Out: TextFile)
+    block CarsTextRangeSelector oftype TextRangeSelector { lineFrom: 7; lineTo: 483; }
+
+    // Converts cars TextFile to Sheet (In: TextFile, Out: Sheet)
+    block CarsCSVInterpreter oftype CSVInterpreter { delimiter: ";"; }
+
+    // Rename necessary columns from cars Sheet (In: Sheet, Out: Sheet)
+    block CarsCellWriter_AtoC oftype CellWriter { at: range A1:C1; write: ["date", "CIN", "name"]; }
+    block CarsCellWriter_M oftype CellWriter { at: cell M1; write: ["petrol"]; }
+    block CarsCellWriter_W oftype CellWriter { at: cell W1; write: ["diesel"]; }
+    block CarsCellWriter_AG oftype CellWriter { at: cell AG1; write: ["gas"]; }
+    block CarsCellWriter_AQ oftype CellWriter { at: cell AQ1; write: ["electro"]; }
+    block CarsCellWriter_BA oftype CellWriter { at: cell BA1; write: ["hybrid"]; }
+    block CarsCellWriter_BK oftype CellWriter { at: cell BK1; write: ["plugInHybrid"]; }
+    block CarsCellWriter_BU oftype CellWriter { at: cell BU1; write: ["others"]; }
+
+    // Data validation for CIN column
+    constraint CIN_Length oftype LengthConstraint { minLength: 5; maxLength: 5; }
+    valuetype CIN oftype text { constraints: [ CIN_Length ]; }
+
+    // Data validation for other columns
+    constraint PositiveRange oftype RangeConstraint { lowerBound: 0; lowerBoundInclusive: false;}
+    valuetype PositiveInteger oftype integer { constraints: [ PositiveRange ]; }
+
+    // Converts cars Sheet to Table and dropped unnecessary columns (In: Sheet, Out: Table)
+    block CarsTableInterpreter oftype TableInterpreter {
+        header: true;
+        columns: [
+            "date" oftype text,
+            "CIN" oftype CIN,
+            "name" oftype text,
+            "petrol" oftype PositiveInteger,
+            "diesel" oftype PositiveInteger,
+            "gas" oftype PositiveInteger,
+            "electro" oftype PositiveInteger,
+            "hybrid" oftype PositiveInteger,
+            "plugInHybrid" oftype PositiveInteger,
+            "others" oftype PositiveInteger
+        ];
+    }
+
+    // Load cars data into sqlite database (In: Table, Out: None)
+    block CarsLoader oftype SQLiteLoader {
+        table: "cars";
+        file: "./cars.sqlite";
+    }
+
+    // Build a chain of all the CarsPipeline's blocks
+    CarsExtractor
+        -> CarsTextFileInterpreter
+        -> CarsTextRangeSelector
+        -> CarsCSVInterpreter
+        -> CarsCellWriter_AtoC
+        -> CarsCellWriter_M
+        -> CarsCellWriter_W
+        -> CarsCellWriter_AG
+        -> CarsCellWriter_AQ
+        -> CarsCellWriter_BA
+        -> CarsCellWriter_BK
+        -> CarsCellWriter_BU 
+        -> CarsTableInterpreter
+        -> CarsLoader;
+
+}
