@@ -3,8 +3,7 @@ name: Continuous Integration Pipeline
 on:
   push:
     paths:
-      - '**'
-      - '!exercise/**'
+      - project/**
   pull_request:
     branches:
       - main
