@@ -2,8 +2,9 @@ name: Continuous Integration Pipeline
 
 on:
   push:
-    paths-ignore:
-      - 'exercise/**'
+    paths:
+      - '**'
+      - '!exercise/**'
   pull_request:
     branches:
       - main
