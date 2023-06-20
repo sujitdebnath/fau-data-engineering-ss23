@@ -22,7 +22,7 @@ pipeline CarsPipeline {
     block CarsCellWriter_AQ oftype CellWriter { at: cell AQ1; write: ["electro"]; }
     block CarsCellWriter_BA oftype CellWriter { at: cell BA1; write: ["hybrid"]; }
     block CarsCellWriter_BK oftype CellWriter { at: cell BK1; write: ["plugInHybrid"]; }
-    block CarsCellWriter_BU oftype CellWriter { at: cell BU1; write: ["other"]; }
+    block CarsCellWriter_BU oftype CellWriter { at: cell BU1; write: ["others"]; }
 
     // Data validation for CIN column
     constraint CIN_Length oftype LengthConstraint { minLength: 5; maxLength: 5; }
@@ -45,7 +45,7 @@ pipeline CarsPipeline {
             "electro" oftype PositiveInteger,
             "hybrid" oftype PositiveInteger,
             "plugInHybrid" oftype PositiveInteger,
-            "other" oftype PositiveInteger
+            "others" oftype PositiveInteger
         ];
     }
 
