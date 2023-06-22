@@ -31,10 +31,13 @@ jobs:
 
       - name: Run tests
         id: run_tests
+        env:
+          STEPS_CONTEXT: ${{ toJson(steps) }}
         run: |
           cd project
           chmod +x tests.sh
           sh tests.sh
+          echo "$STEPS_CONTEXT"
 
       - name: Send Slack notification on test failure
         if: ${{ steps.run_tests.outcome }} == 'failure'
