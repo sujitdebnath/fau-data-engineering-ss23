@@ -3,7 +3,10 @@ name: Continuous Integration Pipeline
 on:
   push:
     paths:
-      - project/**
+      - 'project/**'
+      - '!exploration.ipynb'
+      - '!report.ipynb'
+      - '!project-plan.md'
   pull_request:
     branches:
       - main
