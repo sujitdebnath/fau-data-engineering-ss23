@@ -67,24 +67,26 @@ project/
 │   ├── extract/                # Extraction module
 │   │   ├── __init__.py
 │   │   └── data_extractor.py   # Data extraction logic
-│   ├── load/                   # Loading module
+│   ├──transform/              # Transformation module
 │   │   ├── __init__.py
-│   │   └── data_loader.py      # Data loading logic
-│   └── transform/              # Transformation module
+│   │   └── data_transformer.py # Data transformation logic
+│   └── load/                   # Loading module
 │       ├── __init__.py
-│       └── data_transformer.py # Data transformation logic
+│       └── data_loader.py      # Data loading logic
 ├── pipelines/                  # Data pipeline modules
 │   ├── __init__.py
 │   └── data_pipeline.py        # ETL data pipeline implementation
+├── utils/                      # Utility modules
+│   ├── __init__.py
+│   └── service_factory.py      # Service factory utility
 ├── tests/                      # Test modules
 │   ├── __init__.py
 │   ├── test_component.py       # Test cases for component testing
 │   ├── test_pipeline.py        # Test cases for system testing
 │   └── transformed_data.pkl    # Original transformed data for testing purposes
-├── utils/                      # Utility modules
-│   ├── __init__.py
-│   └── service_factory.py      # Service factory utility
 ├── main.py                     # Entry point of the project
 ├── tests.sh                    # Bash script for running all the test cases
+├── exploration.ipynb           # Notebook for data exploration
+├── report.ipynb                # Notebook for final project report
 └── project-plan.md             # Project plan and documentation
 ```
