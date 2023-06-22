@@ -42,7 +42,7 @@ This data source will provide weather and climate data in Köln, including avera
 3. Implement Data Loading Step in ETL Data Pipeline [#3][i3]
 4. Automated Tests for the Project [#4][i4]
 5. Continuous Integration Pipeline for the Project [#5][i5]
-6. Deploy the Project Using GitHub Pages [#6][i6]
+6. Final Report and Presentation Submission [#6][i6]
 
 [i1]: https://github.com/sujitdebnath/fau-data-engineering-ss23/issues/1
 [i2]: https://github.com/sujitdebnath/fau-data-engineering-ss23/issues/2
