@@ -30,14 +30,13 @@ jobs:
           pdm install
 
       - name: Run tests
-        id: run_tests
         run: |
           cd project
           chmod +x tests.sh
           sh tests.sh
 
       - name: Send Slack notification on test failure
-        if: ${{ steps.run_tests.outputs.status }} == 'failure'
+        if: ${{ failure() }}
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
