@@ -37,7 +37,7 @@ jobs:
           sh tests.sh
 
       - name: Send Slack notification on test failure
-        if: steps.run_tests.outcome == 'failure'
+        if: ${{ steps.run_tests.outcome }} == 'failure'
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
         run: |
