@@ -4,9 +4,9 @@ on:
   push:
     paths:
       - 'project/**'
-      - '!exploration.ipynb'
-      - '!report.ipynb'
-      - '!project-plan.md'
+      - '!project/exploration.ipynb'
+      - '!project/report.ipynb'
+      - '!project/project-plan.md'
   pull_request:
     branches:
       - main
