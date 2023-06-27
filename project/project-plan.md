@@ -67,7 +67,7 @@ project/
 │   ├── extract/                # Extraction module
 │   │   ├── __init__.py
 │   │   └── data_extractor.py   # Data extraction logic
-│   ├──transform/              # Transformation module
+│   ├──transform/               # Transformation module
 │   │   ├── __init__.py
 │   │   └── data_transformer.py # Data transformation logic
 │   └── load/                   # Loading module
