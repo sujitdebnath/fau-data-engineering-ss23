@@ -42,7 +42,7 @@ This data source will provide weather and climate data in Köln, including avera
 3. Implement Data Loading Step in ETL Data Pipeline [#3][i3]
 4. Automated Tests for the Project [#4][i4]
 5. Continuous Integration Pipeline for the Project [#5][i5]
-6. Deploy the Project Using GitHub Pages [#6][i6]
+6. Final Report and Presentation Submission [#6][i6]
 
 [i1]: https://github.com/sujitdebnath/fau-data-engineering-ss23/issues/1
 [i2]: https://github.com/sujitdebnath/fau-data-engineering-ss23/issues/2
@@ -67,24 +67,26 @@ project/
 │   ├── extract/                # Extraction module
 │   │   ├── __init__.py
 │   │   └── data_extractor.py   # Data extraction logic
-│   ├── load/                   # Loading module
+│   ├──transform/               # Transformation module
 │   │   ├── __init__.py
-│   │   └── data_loader.py      # Data loading logic
-│   └── transform/              # Transformation module
+│   │   └── data_transformer.py # Data transformation logic
+│   └── load/                   # Loading module
 │       ├── __init__.py
-│       └── data_transformer.py # Data transformation logic
+│       └── data_loader.py      # Data loading logic
 ├── pipelines/                  # Data pipeline modules
 │   ├── __init__.py
 │   └── data_pipeline.py        # ETL data pipeline implementation
+├── utils/                      # Utility modules
+│   ├── __init__.py
+│   └── service_factory.py      # Service factory utility
 ├── tests/                      # Test modules
 │   ├── __init__.py
 │   ├── test_component.py       # Test cases for component testing
 │   ├── test_pipeline.py        # Test cases for system testing
 │   └── transformed_data.pkl    # Original transformed data for testing purposes
-├── utils/                      # Utility modules
-│   ├── __init__.py
-│   └── service_factory.py      # Service factory utility
 ├── main.py                     # Entry point of the project
 ├── tests.sh                    # Bash script for running all the test cases
+├── exploration.ipynb           # Notebook for data exploration
+├── report.ipynb                # Notebook for final project report
 └── project-plan.md             # Project plan and documentation
 ```
