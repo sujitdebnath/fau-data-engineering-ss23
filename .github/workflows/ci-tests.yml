@@ -6,6 +6,7 @@ on:
       - 'project/**'
       - '!project/exploration.ipynb'
       - '!project/report.ipynb'
+      - '!project/slides.pdf'
       - '!project/project-plan.md'
   pull_request:
     branches:
@@ -25,9 +26,7 @@ jobs:
           python-version: 3.8.x
 
       - name: Install dependencies
-        run: |
-          pip install --user pdm
-          pdm install
+        run: pip install -r requirements.txt
 
       - name: Run tests
         run: |
