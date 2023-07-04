@@ -2,7 +2,7 @@
 
 # Run component tests
 echo "----------------------------------- Component Testing Started -----------------------------------"
-pdm run python -m unittest tests/test_component.py
+python -m unittest tests/test_component.py
 component_exit_code=$?
 echo "----------------------------------- Component Testing Ended -----------------------------------"
 
@@ -16,7 +16,7 @@ echo ""
 
 # Run system tests
 echo "----------------------------------- System Level Testing Started -----------------------------------"
-pdm run python -m unittest tests/test_pipeline.py
+python -m unittest tests/test_pipeline.py
 system_exit_code=$?
 echo "----------------------------------- System Level Testing Ended -----------------------------------"
 
