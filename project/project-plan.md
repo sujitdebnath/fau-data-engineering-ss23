@@ -91,3 +91,11 @@ project/
 ├── slides.pdf                  # Presentation slides of the project
 └── project-plan.md             # Project plan and documentation
 ```
+
+**Important files of the project and their roles:**
+
+- `main.py`: It will run an automated ETL pipeline that creates an SQLite database named `fau_data_engineering_ss23.sqlite` that contains two tables representing two open data sources of the project.
+- `tests.sh`: A bash script that will execute the component and system-level testing for the project by calling two other Python scripts, `project/tests/test_component.py`, and `project/tests/test_pipeline.py` respectively.
+- `exploration.ipynb`: This Jupyter notebook provides a step-by-step guide to explore the data for the project. The purpose of this notebook is to analyze and gain insights into the available data.
+- `report.ipynb`: This Jupyter notebook serves as the final report for the project, providing a comprehensive exploration of all aspects and findings. The report primarily investigates the impact of weather conditions in Köln on bicycle traffic throughout the year, addressing various key questions, based on the data in `fau_data_engineering_ss23.sqlite`. See the [report](project/report.ipynb).
+- `slides.pdf`: This pdf contains the presentation slides of the project.
