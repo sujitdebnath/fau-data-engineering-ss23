@@ -88,5 +88,6 @@ project/
 ├── tests.sh                    # Bash script for running all the test cases
 ├── exploration.ipynb           # Notebook for data exploration
 ├── report.ipynb                # Notebook for final project report
+├── slides.pdf                  # Presentation slides of the project
 └── project-plan.md             # Project plan and documentation
 ```
