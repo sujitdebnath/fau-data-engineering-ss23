@@ -1,5 +1,9 @@
 > _This repository contains data engineering and data science projects and exercises using open data sources as part of the [AMSE](https://oss.cs.fau.de/teaching/specific/amse/)/[SAKI](https://oss.cs.fau.de/teaching/specific/saki/) course, taught by the [FAU Chair for Open-Source Software (OSS)](https://oss.cs.fau.de/) in the Summer'23 semester. This repo is forked from [2023-amse-template repository](https://github.com/jvalue/2023-amse-template)._
 
+<h1 align="center">
+  <img alt="Bicycle" src="img/bicycle_riding.jpg">
+</h1>
+
 # Exploring the Impact of Weather and Climate on Bicycle Traffic in Köln
 
 This project aims to analyze **the weather and climate conditions of Köln and its bicycle traffic** generated from several [automatic counting stations](http://www.eco-public.com/ParcPublic/?id=677) throughout the city to determine if Köln is a suitable city for an enthusiastic cyclist to live in. The project is using two open data sources: [Mobilithek Bicycle Traffic Data](https://mobilithek.info/offers/-2236641647976866002), which contains information on bicycle traffic in Köln, and [Meteostat Weather and Climate Data](https://dev.meteostat.net/bulk/monthly.html), which provides weather and climate data of Köln. For details see the [project plan](/project/project-plan.md).
