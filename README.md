@@ -57,7 +57,9 @@ project/
 
 **Continuous Integration Pipeline using GitHub Action:** <br>
 
-A Continuous Integration pipeline has been implemented using a GitHub action defined in [.github/workflows/ci-tests.yml](.github/workflows/ci-tests.yml). This pipeline is triggered whenever changes are made to the `project/` directory (with a few exceptions: `exploration.ipynb`, `report.ipynb`, `slides.pdf`, `project-plan.md`) and pushed to the GitHub repository, or when a pull request is created and merged into the `main` branch. The `ci-tests.yml` workflow executes the `project/tests.sh` test script, and in case of any failures, it sends an error message to the respective [Slack Channel](https://slack.com/).
+A Continuous Integration pipeline has been implemented using a GitHub action defined in [.github/workflows/ci-tests.yml](.github/workflows/ci-tests.yml). This pipeline is triggered whenever changes are made to the `project/` directory (with a few exceptions: `exploration.ipynb`, `report.ipynb`, `slides.pdf`, `project-plan.md`) and pushed to the GitHub repository, or when a pull request is created and merged into the `main` branch. The `ci-tests.yml` workflow executes the `project/tests.sh` test script, and in case of any failures, it sends an error message to the respective [Slack Channel](https://slack.com/), as shown in the sample screenshot below:
+
+![slack-alert](img/slack_alerts.png)
 
 ## Project Setup
 
