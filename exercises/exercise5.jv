@@ -1,25 +1,10 @@
 // Filter data for specific zone
-constraint ZoneIDRangeConstraint oftype RangeConstraint {
-    lowerBound: 2001;
-    lowerBoundInclusive: true;
-    upperBound: 2001;
-}
-
-valuetype ZoneID oftype integer {
-    constraints: [ ZoneIDRangeConstraint ];
-}
+constraint ZoneIDRangeConstraint oftype RangeConstraint { lowerBound: 2001; upperBound: 2001; }
+valuetype ZoneID oftype integer { constraints: [ ZoneIDRangeConstraint ]; }
 
 // Data validation for geographic coordinates
-constraint GeoCoordinatesRangeConstraint oftype RangeConstraint {
-    lowerBound: -90;
-    lowerBoundInclusive: true;
-    upperBound: 90;
-    upperBoundInclusive: true;
-}
-
-valuetype GeoCoordinates oftype decimal {
-    constraints: [ GeoCoordinatesRangeConstraint ];
-}
+constraint GeoCoordinatesRangeConstraint oftype RangeConstraint { lowerBound: -90; upperBound: 90; }
+valuetype GeoCoordinates oftype decimal { constraints: [ GeoCoordinatesRangeConstraint ]; }
 
 pipeline GTFSPipeline {
 
@@ -38,8 +23,7 @@ pipeline GTFSPipeline {
     // Converts from type TextFile to Sheet (In: TextFile, Out: Sheet)
     block GTFSCSVInterpreter oftype CSVInterpreter {
         delimiter: ",";
-        enclosing:'"';
-        enclosingEscape: '"';
+        enclosing: '"';
     }
 
     // Converts from type Sheet to Table and dropped unnecessary columns (In: Sheet, Out: Table)
