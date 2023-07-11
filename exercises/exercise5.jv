@@ -1,0 +1,72 @@
+// Filter data for specific zone
+constraint ZoneIDRangeConstraint oftype RangeConstraint {
+    lowerBound: 2001;
+    lowerBoundInclusive: true;
+    upperBound: 2001;
+}
+
+valuetype ZoneID oftype integer {
+    constraints: [ ZoneIDRangeConstraint ];
+}
+
+// Data validation for geographic coordinates
+constraint GeoCoordinatesRangeConstraint oftype RangeConstraint {
+    lowerBound: -90;
+    lowerBoundInclusive: true;
+    upperBound: 90;
+    upperBoundInclusive: true;
+}
+
+valuetype GeoCoordinates oftype decimal {
+    constraints: [ GeoCoordinatesRangeConstraint ];
+}
+
+pipeline GTFSPipeline {
+
+    // Extracts zip file from the desired url (In: None, Out: File)
+    block GTFSExtractor oftype HttpExtractor { url: "https://gtfs.rhoenenergie-bus.de/GTFS.zip"; }
+
+    // Unzip extracted data (In: File, Out: FileSystem)
+    block GTFSArchiveInterpreter oftype ArchiveInterpreter { archiveType: "zip"; }
+
+    // Use the desired file in the unzip directory (In: FileSystem, Out: File)
+    block GTFSFilePicker oftype FilePicker { path: "/stops.txt"; }
+
+    // Converts from File type to TextFile type (In: File, Out: TextFile)
+    block GTFSTextFileInterpreter oftype TextFileInterpreter { encoding: "utf-8"; }
+
+    // Converts from type TextFile to Sheet (In: TextFile, Out: Sheet)
+    block GTFSCSVInterpreter oftype CSVInterpreter {
+        delimiter: ",";
+        enclosing:'"';
+        enclosingEscape: '"';
+    }
+
+    // Converts from type Sheet to Table and dropped unnecessary columns (In: Sheet, Out: Table)
+    block GTFSTableInterpreter oftype TableInterpreter {
+        header: true;
+        columns: [
+            "stop_id" oftype integer,
+            "stop_name" oftype text,
+            "stop_lat" oftype GeoCoordinates,
+            "stop_lon" oftype GeoCoordinates,
+            "zone_id" oftype ZoneID
+        ];
+    }
+
+    // Load data into sqlite database (In: Table, Out: None)
+    block GTFSLoader oftype SQLiteLoader {
+        table: "stops";
+        file: "./gtfs.sqlite";
+    }
+
+    // Build a chain of all the GTFSPipeline's blocks
+    GTFSExtractor
+        -> GTFSArchiveInterpreter
+        -> GTFSFilePicker
+        -> GTFSTextFileInterpreter
+        -> GTFSCSVInterpreter
+        -> GTFSTableInterpreter
+        -> GTFSLoader;
+
+}
