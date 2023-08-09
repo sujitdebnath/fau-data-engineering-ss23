@@ -2,7 +2,7 @@
 
 ![bicycle-riding](img/bicycle_riding.jpg)
 
-# Exploring the Impact of Weather and Climate on Bicycle Traffic in Köln
+# Impact of Weather and Climate on Bicycle Traffic in Köln
 
 This project aims to analyze **the weather and climate conditions of Köln and its bicycle traffic** generated from several [automatic counting stations](http://www.eco-public.com/ParcPublic/?id=677) throughout the city to determine if Köln is a suitable city for an enthusiastic cyclist to live in. The project is using two open data sources: [Mobilithek Bicycle Traffic Data](https://mobilithek.info/offers/-2236641647976866002), which contains information on bicycle traffic in Köln, and [Meteostat Weather and Climate Data](https://dev.meteostat.net/bulk/monthly.html), which provides weather and climate data of Köln. For details see the [project plan](/project/project-plan.md).
 
